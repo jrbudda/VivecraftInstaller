@@ -1,0 +1,19 @@
+﻿{
+	"Latest": "1.16",
+	"versions": [
+		{
+			"1.16": {
+				"vrcfg": "https://raw.githubusercontent.com/jrbudda/Vivecraft_116/master/minecriftversion.py",
+				"nonvrcfg": "https://raw.githubusercontent.com/jrbudda/Vivecraft_116/nonvr/minecriftversion.py",
+				"releases": "https://api.github.com/repos/jrbudda/Vivecraft_116/releases"
+			}
+		},
+		{
+			"1.12": {
+				"vrcfg": "https://raw.githubusercontent.com/jrbudda/Vivecraft_112/master/minecriftversion.py",
+				"nonvrcfg": "https://raw.githubusercontent.com/jrbudda/Vivecraft_112/nonvr/minecriftversion.py",
+				"releases": "https://api.github.com/repos/jrbudda/Vivecraft_112/releases"
+			}
+		}
+	]
+}
