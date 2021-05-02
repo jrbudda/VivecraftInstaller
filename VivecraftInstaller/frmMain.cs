@@ -70,7 +70,11 @@ namespace VivecraftInstaller
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Cannot download versions List!\n " + ex.Message);
+                this.BeginInvoke((MethodInvoker)delegate
+                {
+                    MessageBox.Show(this, "Cannot download versions List!\n " + ex.Message);
+                });
+
                 try
                 {
                     using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("VivecraftInstaller.json.versions.json"))
