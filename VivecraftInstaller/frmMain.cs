@@ -7,15 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Text.Json;
 using System.Security.Policy;
 using System.IO;
-using System.Threading.Tasks.Sources;
 using System.Xml.Serialization;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Deployment.Application;
 
 namespace VivecraftInstaller
 {
-
     public partial class frmMain : Form
     {
 
@@ -37,22 +38,22 @@ namespace VivecraftInstaller
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
-            pnlProfile.Visible = chkProfile.Checked;
+            grpProfile.Visible = chkProfile.Checked;
         }
 
         private void chkForge_CheckedChanged(object sender, EventArgs e)
         {
-            pnlForge.Visible = chkForge.Checked;
+            grpForge.Visible = chkForge.Checked;
         }
 
         private void chkPath_CheckedChanged(object sender, EventArgs e)
         {
-            pnlPath.Visible = chkPath.Checked;
+            grpPath.Visible = chkPath.Checked;
         }
 
         private void chkadvanced_CheckedChanged(object sender, EventArgs e)
         {
-            pnlAdvanced.Visible = chkadvanced.Checked;
+            grpAdvanced.Visible = chkadvanced.Checked;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -60,26 +61,40 @@ namespace VivecraftInstaller
             this.Close();
         }
 
-        private void getVersions()
+        private string getVersions()
         {
+            string vers = null;
             try
             {
-                string vers = Util.getWebRequestwithTimeout(Config.versionsUrl, 5);
-                JsonDocument doc = JsonDocument.Parse(vers);
+                vers = Util.getWebRequestwithTimeout(Global.versionsUrl, 5);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
-                //throw;
+                MessageBox.Show("Cannot download versions List!\n " + ex.Message);
+                try
+                {
+                    using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("VivecraftInstaller.json.versions.json"))
+                    {
+                        using (TextReader reader = new StreamReader(stream))
+                        {
+                            vers = reader.ReadToEnd();
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Cannot extract versions List!\n " + ex.Message);
+                }
             }
+            return vers;
         }
 
-        private Dictionary<string, object> getCfg(string url)
+        private Config getCfg(string url)
         {
             return parseCfg(Util.getWebRequestwithTimeout(url, 10));
         }
 
-        private Dictionary<string, object> parseCfg(string cfg)
+        private Config parseCfg(string cfg)
         {
             string[] lines = cfg.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
             Dictionary<string, object> ret = new Dictionary<string, object>();
@@ -98,19 +113,98 @@ namespace VivecraftInstaller
                     ret[pts[0].Trim()] = pts[1].Trim().Replace("\"", "");
                 }
             }
-            return ret;
+            return new Config(ret);
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            getVersions();
+            invis();
+            System.Threading.ThreadPool.QueueUserWorkItem(startup);
         }
 
+        private void startup(object state)
+        {
+            updateCheck();
+            var json = getVersions();
+            if (json == null)
+            {
+                MessageBox.Show("Fatal: Cannot get versions list!");
+                Application.Exit();
+            }
+            else
+            {
+                VersionList versionlist = Newtonsoft.Json.JsonConvert.DeserializeObject<VersionList>(json);
+
+                foreach (Version ver in versionlist.versions)
+                { //download and parse the configs
+                    //TODO: do this as needed with a cache.
+                    try
+                    {
+                        ver.configVR = getCfg(ver.vrcfg);
+                    }
+                    catch (Exception)
+                    {
+                    }
+
+                    try
+                    {
+                        ver.configNONVR = getCfg(ver.nonvrcfg);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+
+
+                this.BeginInvoke((MethodInvoker)delegate
+                {
+                    this.Cursor = Cursors.Default;
+                    populateVersions(versionlist);
+                });
+            }
+        }
+
+        private VersionList versionlist;
+        private void populateVersions(VersionList list)
+        {
+            this.versionlist = list;
+            cmbVersion.Items.Clear();
+            cmbVersion.Items.AddRange(list.versions);
+            if (cmbVersion.Items.Count > 0) cmbVersion.SelectedIndex = 0;
+        }
+
+        private void updateCheck()
+        {
+
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Config.targetDir = txtTarget.Text;
-            var frm = new frmInstalling(this);
+            var version = ((Version)cmbVersion.SelectedItem);
+            var config = version.configVR;
+            if (optNonVR.Checked)
+            {
+                config = ((Version)cmbVersion.SelectedItem).configNONVR;
+                config.isNonVR = true;
+            }
+
+            Global.isForge = chkForge.Checked && chkForge.Visible;
+            Global.isKatVR = chkadvanced.Checked && chkKatVR.Checked && chkKatVR.Visible;
+            Global.isKiosk = chkKiosk.Checked && chkKiosk.Checked && chkKiosk.Visible;
+            Global.forgeVersion = txtForgeVersion.Text;
+            Global.targetDir = txtTarget.Text;
+            Global.createProfile = chkProfile.Checked;
+            Global.profileName = txtProfileName.Text;
+            Global.customGameDir = chkModDir.Checked;
+            Global.gameDir = txtModDir.Text;
+
+            if (chkZGC.Checked && config.ALLOW_ZGC_INSTALL)
+            {
+                Global.zgc = true;
+                Global.gcOpts = "-XX:+UnlockExperimentalVMOptions -XX:+UseZGC";
+            }
+
+            var frm = new frmInstalling(this, config, version.releases);
             frm.Show();
             frm.run();
             this.Hide();
@@ -119,6 +213,73 @@ namespace VivecraftInstaller
         private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
         {
             Application.Exit();
+        }
+
+        private void invis()
+        {
+            foreach (Control control in tableLayoutPanel1.Controls)
+            {
+                if (control != pnlVersion && control != pnlButtons)
+                    control.Visible = false;
+            }
+        }
+
+        private void cmbVersion_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Version selection = (Version)cmbVersion.SelectedItem;
+            Config cfg = null;
+
+            if (selection == null)
+            {
+                invis();
+            }
+            else
+            {
+                cfg = selection.configVR;
+                if (optNonVR.Checked)
+                    cfg = selection.configNONVR;
+
+                if (cfg == null)
+                {
+                    invis();
+                    lblVersionDetails.Text = "ERROR";
+                }
+                else
+                {
+                    pnlCustom.Visible = true;
+                    pnlProfileOpt.Visible = true;
+                    pnlForgeOpt.Visible = cfg.ALLOW_FORGE_INSTALL; ;
+                    pnlAdvanced.Visible = cfg.ALLOW_HRTF_INSTALL || cfg.ALLOW_KATVR_INSTALL || cfg.ALLOW_KIOSK_INSTALL || cfg.PROMPT_REMOVE_HRTF;
+                    lblVersionDetails.Text = cfg.PROJECT_NAME + " " + cfg.VIVECRAFT_VERSION;
+                    txtForgeVersion.Text = cfg.FORGE_VERSION;
+                    chkForge.Checked = cfg.DEFAULT_FORGE_INSTALL;
+                    txtProfileName.Text = !chkForge.Checked ? cfg.DEFAULT_PROFILE_NAME : cfg.DEFAULT_PROFILE_NAME_FORGE;
+                    cmbRAM.SelectedIndex = !chkForge.Checked ? 1 : 3;
+                    txtTarget.Text = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".minecraft");
+                }
+            }
+            btnInstall.Enabled = cfg != null;
+        }
+
+
+        private void checkBox7_CheckedChanged(object sender, EventArgs e)
+        {
+            txtForgeVersion.ReadOnly = !checkBox7.Checked;
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(Global.HOMEPAGE_LINK);
+        }
+
+        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(Global.DONATION_LINK);
+        }
+
+        private void optNonVR_CheckedChanged(object sender, EventArgs e)
+        {
+            cmbVersion_SelectedIndexChanged(this, null);
         }
     }
 }

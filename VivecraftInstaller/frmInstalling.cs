@@ -1,15 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using ICSharpCode.SharpZipLib.Core;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace VivecraftInstaller
@@ -17,14 +12,21 @@ namespace VivecraftInstaller
     public partial class frmInstalling : Form
     {
         private frmMain parent;
-        public frmInstalling(frmMain parent)
+        private Config Config;
+        private string releases;
+        public frmInstalling(frmMain parent, Config selectedConfig, string releases)
         {
             InitializeComponent();
             this.parent = parent;
+            this.Config = selectedConfig;
+            this.releases = releases;
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            this.Close();
+            if (button1.Text == "Close")
+                Application.Exit();
+            else
+                this.Close();
         }
         private void frmInstalling_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -67,36 +69,131 @@ namespace VivecraftInstaller
 
         private void task()
         {
+            log("Checking Compatibility...");
 
-            //Optifine
-            log("Downloading Optifine...");
-            string dest = Path.Combine(Config.targetDir, Config.OF_LIB_PATH + Config.OF_FILE_NAME + "_LIB");
-            if (Config.isMultiMC)
-                dest = Path.Combine(Config.mmcinst, "libraries");
-            DownloadOptiFine(dest);
+            //Check Java
+            log("Checking Java...");
+            var java = Util.getJava();
+            log("Java Results: ");
+            foreach (var s in java)
+            {
+                log("\t" + s);
+            }
             //
 
             prog(5);
 
-            //Library
-            log("Downloading Vivecraft...");
-            string dest = Path.Combine(Config.targetDir, Config.OF_LIB_PATH + Config.OF_FILE_NAME + "_LIB");
-            if (Config.isMultiMC)
-                dest = Path.Combine(Config.mmcinst, "libraries");
-            DownloadOptiFine(dest);
+            //Check System
+            log("Checking GPU...");
+            var gpus = Util.getGPU();
+            var intel = false;
+            log("GPU Results:");
+            foreach (var gpu in gpus)
+            {
+                log("Found: " + gpu);
+                if (gpu.ToLower().Contains("intel")) intel = true;
+            }
+            if (intel && gpus.Length == 1)
+            {
+                //nope
+                log("Only found integrated graphics.");
+                if (MessageBox.Show("Only found Intel Integrated Grpahics on this PC. \n" +
+                       "Intel drivers do not support VR in OpenGL-based games like Minecraft.\n" +
+                       "Continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                    return;
+            }
+            else if (intel && gpus.Length > 1)
+            {
+                //warn
+                log("Multiple GPUs found.");
+                MessageBox.Show(null, "This PC has multiple GPUs including Intel Integrated graphics. \n" +
+                   "You must force Windows to run Java on the non-integrated GPU or Vivecraft will not render." +
+                   "More information can be found on the Vivecraft website FAQ.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
             //
 
             prog(5);
+
+            //Vivecraft
+
+            log("Getting Archive URL...  " + releases);
+            var api = Util.getWebRequestwithTimeout(this.releases + "/latest", 10);
+            JObject apijson = JObject.Parse(api);
+            JArray assets = (JArray)apijson["assets"];
+            string dlurl = null;
+            foreach (JObject asset in assets)
+            {
+                var url = (string)asset["browser_download_url"];
+                if (Config.isNonVR && url.ToLower().Contains("nonvr"))
+                {
+                    dlurl = url;
+                    break;
+                }
+                if (!Config.isNonVR && !url.ToLower().Contains("nonvr"))
+                {
+                    dlurl = url;
+                    break;
+                }
+            }
+
+            if (dlurl == null)
+            {
+                log("Error finding correct archive to download!");
+                return;
+            }
+
+            log("Downloading Vivecraft " + Config.VIVECRAFT_VERSION + " from " + dlurl);
+            prog(5);
+
+            var jar = Util.getWebBinarywithTimeout(dlurl, 10);
+            using (MemoryStream mem = new MemoryStream(jar))
+            {
+                using (ICSharpCode.SharpZipLib.Zip.ZipFile archive = new ICSharpCode.SharpZipLib.Zip.ZipFile(mem))
+                {
+                    log("Extracting Vivecraft Files...");
+                    var ret = ExtractVersion(archive);
+                    if (!ret)
+                    {
+                        log("Something has gone wrong extracting the files!");
+                        return;
+                    }
+                }
+
+                //using (ZipArchive archive = new ZipArchive(mem, ZipArchiveMode.Read))
+                //{
+                //    log("Extracting Vivecraft Files...");
+                //    var ret = ExtractVersion(archive);
+                //    if (!ret)
+                //    {
+                //        log("Something has gone wrong extracting the files!");
+                //        return;
+                //    }
+                //}
+            }
+            log("Sucess");
+
+            prog(15);
 
             //Profile
-            if (Config.createProfile)
+            if (Global.createProfile)
             {
-                log("Creating Profile");
-                //createProfile();
+                log("Creating Profile...");
+                updateLauncherJson();
+                log("Sucess");
+            }
+            else
+            {
+                log("Skipping Profile Update");
             }
             prog(5);
             //
 
+            log("Installation Complete.");
+            prog(500);
+            this.BeginInvoke((MethodInvoker)delegate
+            {
+                button1.Text = "Close";
+            });
         }
         private string checkMMC(string targetDir)
         {
@@ -132,225 +229,253 @@ namespace VivecraftInstaller
                 }
             return null;
         }
-
-        private bool DownloadOptiFine(string destination)
+        string version_id = null;
+        private bool ExtractVersion(ICSharpCode.SharpZipLib.Zip.ZipFile archive)
         {
-            try
-            {
-
-                if (!Directory.Exists(destination))
-                {
-                    Directory.CreateDirectory(destination);
-                }
-
-                string filename = Path.Combine(destination, "OptiFine-" + Config.OF_FILE_NAME + "_LIB.jar");
-                var fo = new FileInfo(filename);
-
-                //checks md5 and downloads if needed.
-                var success = downloadFile(Config.OF_URL, fo, Config.OF_MD5);
-
-                return true;
-            }
-            catch (Exception e)
-            {
-                log(" Error: " + e.Message);
-            }
-            return false;
-        }
-
-        private bool downloadFile(string surl, FileInfo fo, string md5)
-        {
-
-            if (fo.Exists)
-            {
-                if (md5 != null && Util.checkMD5(fo, md5))
-                {
-                    log(fo.Name + " already exists, skipping download");
-                    return true;
-                }
-                else
-                {
-                    log(fo.Name + " already exists, bad hash, deleting");
-                    fo.Delete();
-                }
-            }
-
-            var bytes = Util.getWebBinarywithTimeout(surl, 10);
-            using (var fs = fo.OpenWrite())
-            {
-                fs.Write(bytes, 0, bytes.Length);
-            }
-            var ok = md5 == null || Util.checkMD5(fo, md5);
-
-            if (!ok)
-            {
-                log(fo.Name + " Downloaded but bad hash, deleting");
-                fo.Delete();
-            }
-
-            return ok;
-
-        }
-
-        private bool ExtractVersion()
-        {
-            if (Config.JAR_ID == null) return false;
             string mod = "";
-            //InputStream version_json;
-            if (Config.isMultiMC)
+            string json_filename = null;
+            if (Global.isMultiMC)
             {
-                string filename = "version-multimc.json";
-
-                if (Config.isForge)
-                    filename = "version-multimc-forge.json";
-                //version_json = Installer.class.getResourceAsStream(filename);
+                json_filename = "version-multimc.json";
+                if (Global.isForge)
+                    json_filename = "version-multimc-forge.json";
             }
-
-            else if (Config.isForge)
+            else if (Global.isForge)
             {
-                string filename;
-
-                filename = "version-forge.json";
+                json_filename = "version-forge.json";
                 mod = "-forge";
-
-                //					version_json = new FilterInputStream(Installer.class.getResourceAsStream(filename) ) {
-                //					version_json = new FilterInputStream(Installer.class.getResourceAsStream(filename) ) {
-                //						public int read(byte[] buff) throws IOException
-                //    {
-                //							int ret = in.read(buff);
-                //							if( ret > 0 ) {
-                //            string s = new string(buff, 0, ret, "UTF-8");
-                //            if (optCustomForgeVersion.isSelected())
-                //                s = s.replace(ORIG_FORGE_VERSION, FORGE_VERSION);
-                //            ret = s.length();
-                //            System.arraycopy(s.getBytes("UTF-8"), 0, buff, 0, ret);
-                //        }
-                //							return ret;
-                //    }
-                //};
             }
             else
             {
-                string filename;
-                if (Config.isShadersMod)
+                if (Global.isShadersMod)
                 {
-                    filename = "version-shadersmod.json";
+                    json_filename = "version-shadersmod.json";
                     mod = "-shadersmod";
                 }
                 else
                 {
-                    filename = "version.json";
+                    json_filename = "version.json";
                 }
-                //version_json = Installer.class.getResourceAsStream(filename);
             }
 
-            Config.JAR_ID += mod;
-            //InputStream version_jar = Installer.class.getResourceAsStream("version.jar");
-            //TODO download or extract jar and jsons(s)
-            object version_jar = null;
-            object version_json = null;
-
-            if (version_jar != null && version_json != null)
+            if (json_filename == null)
             {
-                try
+                log("Invalid Options!");
+                return false;
+            }
+
+            ICSharpCode.SharpZipLib.Zip.ZipEntry version_jar = null;
+            JObject version_json = null;
+
+            foreach (ICSharpCode.SharpZipLib.Zip.ZipEntry entry in archive)
+            {
+                if (entry.Name.ToLower() == "version.jar")
                 {
-                    string ver_dir = null;
-                    if (Config.isMultiMC)
-                    {
-                        ver_dir = Path.Combine(Config.mmcinst, "patches");
-                        Config.JAR_ID = "vivecraft";
-                    }
-                    else
-                        ver_dir = Path.Combine(Config.targetDir, "versions", Config.JAR_ID);
-
-                    if (!Directory.Exists(ver_dir))
-                    {
-                        Directory.CreateDirectory(ver_dir);
-                    }
-
-                    //string ver_json_file = Path.Combine(ver_dir, jar_id + ".json");
-                    //FileOutputStream ver_json = new FileOutputStream(ver_json_file);
-                    //int d;
-                    //byte data[] = new byte[40960];
-
-                    // Extract json
-                    //while ((d = version_json.read(data)) != -1)
-                    //{
-                    //    ver_json.write(data, 0, d);
-                    //}
-                    //ver_json.close();
-
-                    //modify json args if needed
+                    version_jar = entry;
+                    continue;
+                }
+                if (entry.Name.ToLower() == "version")
+                {
+             
+                    var txt = new StreamReader(archive.GetInputStream(entry)).ReadToEnd();
+                    var pts = txt.Split(':');
+                    version_id = pts[0];
+                    continue;
+                }
+                if (entry.Name.ToLower() == json_filename)
+                {
                     try
                     {
-                        int jsonIndentSpaces = 2;
-                        string fileJson = ""; //ver_json_file;
-
-                        JObject root = null;
-
-                        using (var reader = new JsonTextReader(File.OpenText(fileJson)))
-                        {
-                            root = (JObject)JToken.ReadFrom(reader);
-                        }
-
-                        string args = (string)root["minecraftArguments"];
-
-                        if (args != null)
-                        {
-                            if (Config.isKatVR) args += " --katvr";
-                            if (Config.isKiosk) args += " --kiosk";
-                            root.Add("minecraftArguments", args);
-                        }
-
-                        if (Config.isMultiMC)
-                            root.Remove("id");
-
-                        /*if(isMultiMC && useForge.isSelected()) {
-                            JSONArray tw = (JSONArray) root.get("+tweakers");
-                            tw = new JSONArray();
-                            tw.put("org.vivecraft.tweaker.MinecriftForgeTweaker");
-                            tw.put("net.minecraftforge.fml.common.launcher.FMLTweaker");
-                            tw.put("optifine.OptiFineForgeTweaker");
-                            root.put("+tweakers", tw);
-                        }*/
-
-                        using (JsonTextWriter writer = new JsonTextWriter(File.CreateText(fileJson)))
-                        {
-                            root.WriteTo(writer);
-                        }
+                        var txt = new StreamReader(archive.GetInputStream(entry)).ReadToEnd();
+                        version_json = JObject.Parse(txt);
                     }
-                    catch (Exception e)
+                    catch (Exception ex)
                     {
-                        log(" Error: " + e.Message);
+                        log("Failed parsing version json! " + ex.Message);
                     }
+                    continue;
+                }
+            }
 
-                    // Extract new lib
-                    string lib_dir = Path.Combine(Config.targetDir, "libraries/com/mtbs3d/minecrift/", version);
-                    if (Config.isMultiMC)
-                        lib_dir = Path.Combine(Config.mmcinst, "libraries");
+            if (version_jar == null || version_json == null || version_id == null)
+            {
+                log("Invalid archive!");
+                return false;
+            }
 
-                    if (!Directory.Exists(lib_dir))
+            version_id += mod;
+
+            //modify json args if needed
+            try
+            {
+                string args = (string)version_json["minecraftArguments"];
+
+                if (args != null)
+                {
+                    if (Global.isKatVR) args += " --katvr";
+                    if (Global.isKiosk) args += " --kiosk";
+                    version_json["minecraftArguments"] = args;
+                }
+
+                if (Global.isMultiMC)
+                    version_json.Remove("id");
+
+                JArray libs = (JArray)version_json["libraries"];
+                //Since this installer does not download Optifine, inject the url into any existing json not yet updated.
+                foreach(var lib in libs)
+                {
+                    if(lib["name"].ToString().Contains("optifine:OptiFine") && lib["url"] == null)
                     {
-                        Directory.CreateDirectory(lib_dir);
+                        lib["url"] = "http://vivecraft.org/jar/";
+                        if (lib["MMC-hint"] != null)
+                            lib["MMC-hint"].Parent.Remove();
                     }
+                }
 
-                    string ver_file = Path.Combine(lib_dir, "minecrift-" + version + ".jar");
+                /*if(isMultiMC && useForge.isSelected()) {
+                    JSONArray tw = (JSONArray) root.get("+tweakers");
+                    tw = new JSONArray();
+                    tw.put("org.vivecraft.tweaker.MinecriftForgeTweaker");
+                    tw.put("net.minecraftforge.fml.common.launcher.FMLTweaker");
+                    tw.put("optifine.OptiFineForgeTweaker");
+                    root.put("+tweakers", tw);
+                }*/
+            }
+            catch (Exception e)
+            {
+                log("Error modifying version json! " + e.Message);
+            }
 
-                    //FileOutputStream ver_jar = new FileOutputStream(ver_file);
-                    //while ((d = version_jar.read(data)) != -1)
-                    //{
-                    //    ver_jar.write(data, 0, d);
-                    //}
-                    //ver_jar.close();
+            //write version json
+            try
+            {
+                string ver_dir = null;
+                if (Global.isMultiMC)
+                {
+                    ver_dir = Path.Combine(Global.mmcinst, "patches");
+                    version_id = "vivecraft";
+                }
+                else
+                    ver_dir = Path.Combine(Global.targetDir, "versions", version_id);
 
-                    //return ver_json_file.exists() && ver_file.exists();
+                if (!Directory.Exists(ver_dir))
+                    Directory.CreateDirectory(ver_dir);
+                string ver_json_file = Path.Combine(ver_dir, version_id + ".json");
+                File.WriteAllText(ver_json_file, version_json.ToString(Formatting.Indented));
+            }
+            catch (Exception ex)
+            {
+                log("Failed writing version json! " + ex.Message);
+            }
+
+            //write lib jar
+            try
+            {
+                string lib_dir = Path.Combine(Global.targetDir, "libraries","com","mtbs3d","minecrift", Config.VIVECRAFT_VERSION);
+                if (Global.isMultiMC)
+                    lib_dir = Path.Combine(Global.mmcinst, "libraries");
+
+                if (!Directory.Exists(lib_dir))
+                {
+                    Directory.CreateDirectory(lib_dir);
+                }
+
+                string ver_file = Path.Combine(lib_dir, "minecrift-" + Config.VIVECRAFT_VERSION + ".jar");
+
+                if (File.Exists(ver_file))
+                    File.Delete(ver_file);
+
+                using (var reader = archive.GetInputStream(version_jar))
+                {
+                    using (var writer = File.OpenWrite(ver_file))
+                    {
+                        StreamUtils.Copy(reader, writer, new byte[2048]);
+                    }
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                log("Error writing library jar! " + e.Message);
+            }
+
+            return false;
+        }
+        private bool updateLauncherJson()
+        {
+            bool result = false;
+
+            try
+            {
+                string fileJson = Path.Combine(Global.targetDir, "launcher_profiles.json");
+                String json = File.ReadAllText(fileJson);
+                JObject root = JObject.Parse(json);
+
+                JObject profiles = (JObject)root["profiles"];
+                JObject prof = null;
+                try
+                {
+                    prof = (JObject)profiles[Global.profileName];
                 }
                 catch (Exception e)
                 {
-                    log(" Error: " + e.Message);
+                    //this is normal if doesnt exist.
                 }
+
+                string dateFormat = "yyyy-MM-dd'T'HH:mm:ss.fffZ";
+
+                if (prof == null)
+                {
+                    prof = new JObject();
+                    prof["created"] = DateTime.Now.ToString(dateFormat);
+                    profiles[Global.profileName] = prof;
+                }
+
+                prof["lastVersionId"] = version_id;
+                prof["javaArgs"] = "-Xmx" + Global.xmx + "G -Xms" + Global.xms + "G " + Global.gcOpts;
+                prof["name"] = Global.profileName;
+                prof["icon"] = Global.ICON;
+                prof["type"] = "custom";
+                prof["lastUsed"] = DateTime.Now.ToString(dateFormat);
+
+                if (Global.customGameDir && Global.gameDir.Trim() != "")
+                {
+                    String dir = Global.gameDir.Trim();
+                    if (dir.EndsWith("\\mods")) dir = dir.Substring(0, dir.Length - 5);
+                    if (dir.EndsWith("\\mods\\")) dir = dir.Substring(0, dir.Length - 6);
+                    prof["gameDir"] = dir;
+                }
+                else
+                {
+                    prof.Remove("gameDir");
+                }
+
+                if (Global.zgc)
+                {
+                    String javaExe;
+                    if (prof.ContainsKey("javaDir"))
+                        javaExe = (string)prof["javaDir"];
+                    else
+                    {
+                        javaExe = "";
+                    }
+
+                    //javaExe = checkForJava14(javaExe);
+                    //if (!javaExe.isEmpty())
+                    //    prof["javaDir", javaExe);
+                }
+
+
+                File.WriteAllText(fileJson, root.ToString(Formatting.Indented));
+
+                result = true;
             }
-            return false;
+            catch (Exception e)
+            {
+                log("Error updating launcher profiles! " + e.Message);
+            }
+
+            return result;
         }
 
     }

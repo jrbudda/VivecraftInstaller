@@ -1,19 +1,52 @@
 ﻿{
-	"Latest": "1.16",
 	"versions": [
 		{
-			"1.16": {
-				"vrcfg": "https://raw.githubusercontent.com/jrbudda/Vivecraft_116/master/minecriftversion.py",
-				"nonvrcfg": "https://raw.githubusercontent.com/jrbudda/Vivecraft_116/nonvr/minecriftversion.py",
-				"releases": "https://api.github.com/repos/jrbudda/Vivecraft_116/releases"
-			}
+			"version": "1.16 (Current)",
+			"vrcfg": "https://raw.githubusercontent.com/jrbudda/Vivecraft_116/master/minecriftversion.py",
+			"nonvrcfg": "https://raw.githubusercontent.com/jrbudda/Vivecraft_116/nonvr/minecriftversion.py",
+			"releases": "https://api.github.com/repos/jrbudda/Vivecraft_116/releases"
 		},
 		{
-			"1.12": {
-				"vrcfg": "https://raw.githubusercontent.com/jrbudda/Vivecraft_112/master/minecriftversion.py",
-				"nonvrcfg": "https://raw.githubusercontent.com/jrbudda/Vivecraft_112/nonvr/minecriftversion.py",
-				"releases": "https://api.github.com/repos/jrbudda/Vivecraft_112/releases"
-			}
+			"version": "1.12 (Current)",
+			"vrcfg": "https://raw.githubusercontent.com/jrbudda/Vivecraft_112/master/minecriftversion.py",
+			"nonvrcfg": "https://raw.githubusercontent.com/jrbudda/Vivecraft_112/nonvr/minecriftversion.py",
+			"releases": "https://api.github.com/repos/jrbudda/Vivecraft_112/releases"
+		},
+		{
+			"version": "1.15 (Outdated)",
+			"vrcfg": "https://raw.githubusercontent.com/jrbudda/Vivecraft_115/master/minecriftversion.py",
+			"nonvrcfg": "https://raw.githubusercontent.com/jrbudda/Vivecraft_115/nonvr/minecriftversion.py",
+			"releases": "https://api.github.com/repos/jrbudda/Vivecraft_115/releases"
+		},
+		{
+			"version": "1.14 (Outdated)",
+			"vrcfg": "https://raw.githubusercontent.com/jrbudda/Vivecraft_114/master/minecriftversion.py",
+			"nonvrcfg": "https://raw.githubusercontent.com/jrbudda/Vivecraft_114/nonvr/minecriftversion.py",
+			"releases": "https://api.github.com/repos/jrbudda/Vivecraft_114/releases"
+		},
+		{
+			"version": "1.13 (Outdated)",
+			"vrcfg": "https://raw.githubusercontent.com/jrbudda/Vivecraft_113/master/minecriftversion.py",
+			"nonvrcfg": "https://raw.githubusercontent.com/jrbudda/Vivecraft_113/nonvr/minecriftversion.py",
+			"releases": "https://api.github.com/repos/jrbudda/Vivecraft_113/releases"
+		},
+		{
+			"version": "1.11 (Outdated)",
+			"vrcfg": "https://raw.githubusercontent.com/jrbudda/Vivecraft_111/master/minecriftversion.py",
+			"nonvrcfg": "https://raw.githubusercontent.com/jrbudda/Vivecraft_111/nonvr/minecriftversion.py",
+			"releases": "https://api.github.com/repos/jrbudda/Vivecraft_111/releases"
+		},
+		{
+			"version": "1.10 (Outdated)",
+			"vrcfg": "https://raw.githubusercontent.com/jrbudda/Vivecraft_110/master/minecriftversion.py",
+			"nonvrcfg": "https://raw.githubusercontent.com/jrbudda/Vivecraft_110/nonvr/minecriftversion.py",
+			"releases": "https://api.github.com/repos/jrbudda/Vivecraft_110/releases"
+		},
+		{
+			"version": "1.7.10 (Outdated)",
+			"vrcfg": "https://raw.githubusercontent.com/jrbudda/minecrift/master/minecriftversion.py",
+			"nonvrcfg": "https://raw.githubusercontent.com/jrbudda/minecrift/nonvr/minecriftversion.py",
+			"releases": "https://api.github.com/repos/jrbudda/minecrift/releases"
 		}
 	]
 }
