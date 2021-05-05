@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
@@ -158,17 +159,6 @@ namespace VivecraftInstaller
                         return;
                     }
                 }
-
-                //using (ZipArchive archive = new ZipArchive(mem, ZipArchiveMode.Read))
-                //{
-                //    log("Extracting Vivecraft Files...");
-                //    var ret = ExtractVersion(archive);
-                //    if (!ret)
-                //    {
-                //        log("Something has gone wrong extracting the files!");
-                //        return;
-                //    }
-                //}
             }
             log("Sucess");
 
@@ -188,8 +178,31 @@ namespace VivecraftInstaller
             prog(5);
             //
 
+            if (Global.isForge && !Global.isMultiMC)
+                if (!checkForge())
+                {
+                    prog(5);
+                    log("Selected Forge version not found.");
+                    if (installForge())
+                    {
+                        log("Success");
+                    }
+                    else
+                    {
+                        log("Failed to install selected Forge version");
+                    }
+                    prog(5);
+                }
+                else
+                {
+                    log("Selected Forge version already installed.");
+                }
+
+
             log("Installation Complete.");
+
             prog(500);
+
             this.BeginInvoke((MethodInvoker)delegate
             {
                 button1.Text = "Close";
@@ -276,7 +289,7 @@ namespace VivecraftInstaller
                 }
                 if (entry.Name.ToLower() == "version")
                 {
-             
+
                     var txt = new StreamReader(archive.GetInputStream(entry)).ReadToEnd();
                     var pts = txt.Split(':');
                     version_id = pts[0];
@@ -322,9 +335,9 @@ namespace VivecraftInstaller
 
                 JArray libs = (JArray)version_json["libraries"];
                 //Since this installer does not download Optifine, inject the url into any existing json not yet updated.
-                foreach(var lib in libs)
+                foreach (var lib in libs)
                 {
-                    if(lib["name"].ToString().Contains("optifine:OptiFine") && lib["url"] == null)
+                    if (lib["name"].ToString().Contains("optifine:OptiFine") && lib["url"] == null)
                     {
                         lib["url"] = "http://vivecraft.org/jar/";
                         if (lib["MMC-hint"] != null)
@@ -371,7 +384,7 @@ namespace VivecraftInstaller
             //write lib jar
             try
             {
-                string lib_dir = Path.Combine(Global.targetDir, "libraries","com","mtbs3d","minecrift", Config.VIVECRAFT_VERSION);
+                string lib_dir = Path.Combine(Global.targetDir, "libraries", "com", "mtbs3d", "minecrift", Config.VIVECRAFT_VERSION);
                 if (Global.isMultiMC)
                     lib_dir = Path.Combine(Global.mmcinst, "libraries");
 
@@ -476,6 +489,106 @@ namespace VivecraftInstaller
             }
 
             return result;
+        }
+
+        public bool checkForge()
+        {
+            if (Directory.Exists(Global.targetDir))
+            {
+                string ForgeDir = Path.Combine(Global.targetDir, "libraries", "net", "minecraftforge", "forge");
+                if (!Directory.Exists(ForgeDir)) return false;
+                var forgeVersions = Directory.GetDirectories(ForgeDir);
+                if (forgeVersions != null && forgeVersions.Length > 0)
+                {
+                    // Check for the currently required forge
+                    foreach (string forgeVersion in forgeVersions)
+                    {
+                        if (forgeVersion.Contains(Config.FORGE_VERSION))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        public bool installForge()
+        {
+            //TODO: check to see if systrm java exists first.
+
+            log("Downloading Forge " + Config.FULL_FORGE_VERSION + "");
+
+            var dir = Path.GetTempPath();
+            var file = Config.FORGE_FILE;
+            var path = Path.Combine(dir, file);
+
+            byte[] jar = null;
+            try
+            {
+                jar = Util.getWebBinarywithTimeout(Config.FORGE_URL, 10);
+            }
+            catch (Exception ex)
+            {
+                log("Error downloading Forge " + ex.Message);
+                return false;
+            }
+
+            try
+            {
+                if (File.Exists(path))
+                    File.Delete(path);
+            }
+            catch (Exception ex)
+            {
+                log("Error downloading Forge " + ex.Message);
+                return false;
+            }
+
+
+            try
+            {
+                using (var reader = new MemoryStream(jar))
+                {
+                    using (var writer = File.OpenWrite(path))
+                    {
+                        StreamUtils.Copy(reader, writer, new byte[2048]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log("Error downloading Forge " + ex.Message);
+                return false;
+            }
+
+            prog(5);
+            log("Launching Forge Installer " + Config.FORGE_FILE + "...");
+
+            try
+            {
+                var proc = Process.Start("javaw", "-jar " + path);
+                //TODO do I care about stdout, stderr?
+                proc.WaitForExit();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log("This shouldn't happen " + ex.Message);
+            }
+            finally
+            {
+                try
+                { //cleanup
+                    if (File.Exists(path))
+                        File.Delete(path);
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            return false;
         }
 
     }

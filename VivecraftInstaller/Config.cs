@@ -41,6 +41,29 @@ namespace VivecraftInstaller
             }
         }
 
+        public string FULL_FORGE_VERSION
+        {
+            get
+            {
+                return MC_VERSION + "-" + FORGE_VERSION;
+            }
+        }
+        public string FORGE_FILE
+        {
+            get
+            {
+                return "forge-" + FULL_FORGE_VERSION + "-installer.jar";
+            }
+        }
+        public string FORGE_URL
+        {
+            get
+            {
+                return "https://files.minecraftforge.net/maven/net/minecraftforge/forge/" + FULL_FORGE_VERSION + "/" + FORGE_FILE;
+            }
+        }
+
+
         public Config(Dictionary<string, object> ret)
         {
             if (ret.ContainsKey("allow_forge"))
