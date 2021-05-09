@@ -52,45 +52,48 @@
             this.checkBox7 = new System.Windows.Forms.CheckBox();
             this.txtForgeVersion = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.chkKatVR = new System.Windows.Forms.CheckBox();
-            this.chkKiosk = new System.Windows.Forms.CheckBox();
-            this.pnlAdvanced = new System.Windows.Forms.Panel();
-            this.pnlProfileOpt = new System.Windows.Forms.Panel();
-            this.pnlForgeOpt = new System.Windows.Forms.Panel();
-            this.pnlCustom = new System.Windows.Forms.Panel();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.pnlButtons = new System.Windows.Forms.Panel();
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
-            this.pnlVersion = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.optVR = new System.Windows.Forms.RadioButton();
-            this.optNonVR = new System.Windows.Forms.RadioButton();
-            this.cmbVersion = new System.Windows.Forms.ComboBox();
-            this.lblVersionDetails = new System.Windows.Forms.Label();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.pnlAdvanced = new System.Windows.Forms.Panel();
             this.grpAdvanced = new System.Windows.Forms.GroupBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.chkKiosk = new System.Windows.Forms.CheckBox();
+            this.chkKatVR = new System.Windows.Forms.CheckBox();
+            this.pnlProfileOpt = new System.Windows.Forms.Panel();
+            this.pnlForgeOpt = new System.Windows.Forms.Panel();
             this.grpForge = new System.Windows.Forms.GroupBox();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.pnlCustom = new System.Windows.Forms.Panel();
             this.grpPath = new System.Windows.Forms.GroupBox();
             this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
-            this.pnlButtons = new System.Windows.Forms.Panel();
+            this.pnlVersion = new System.Windows.Forms.Panel();
+            this.lblVersionDetails = new System.Windows.Forms.Label();
+            this.cmbVersion = new System.Windows.Forms.ComboBox();
+            this.optNonVR = new System.Windows.Forms.RadioButton();
+            this.optVR = new System.Windows.Forms.RadioButton();
+            this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.grpProfile.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.pnlButtons.SuspendLayout();
             this.pnlAdvanced.SuspendLayout();
-            this.pnlProfileOpt.SuspendLayout();
-            this.pnlForgeOpt.SuspendLayout();
-            this.pnlCustom.SuspendLayout();
-            this.pnlVersion.SuspendLayout();
             this.grpAdvanced.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
+            this.pnlProfileOpt.SuspendLayout();
+            this.pnlForgeOpt.SuspendLayout();
             this.grpForge.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
+            this.pnlCustom.SuspendLayout();
             this.grpPath.SuspendLayout();
             this.flowLayoutPanel3.SuspendLayout();
-            this.pnlButtons.SuspendLayout();
+            this.pnlVersion.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -99,8 +102,9 @@
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(511, 239);
+            this.pictureBox1.Size = new System.Drawing.Size(383, 194);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
@@ -109,17 +113,20 @@
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.button2);
             this.groupBox2.Controls.Add(this.btnInstall);
-            this.groupBox2.Location = new System.Drawing.Point(295, -3);
+            this.groupBox2.Location = new System.Drawing.Point(227, -2);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(187, 50);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox2.Size = new System.Drawing.Size(140, 41);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(96, 16);
+            this.button2.Location = new System.Drawing.Point(72, 13);
+            this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.Size = new System.Drawing.Size(56, 19);
             this.button2.TabIndex = 1;
             this.button2.Text = "Cancel";
             this.button2.UseVisualStyleBackColor = true;
@@ -128,9 +135,10 @@
             // btnInstall
             // 
             this.btnInstall.Enabled = false;
-            this.btnInstall.Location = new System.Drawing.Point(15, 16);
+            this.btnInstall.Location = new System.Drawing.Point(11, 13);
+            this.btnInstall.Margin = new System.Windows.Forms.Padding(2);
             this.btnInstall.Name = "btnInstall";
-            this.btnInstall.Size = new System.Drawing.Size(75, 23);
+            this.btnInstall.Size = new System.Drawing.Size(56, 19);
             this.btnInstall.TabIndex = 0;
             this.btnInstall.Text = "Install";
             this.btnInstall.UseVisualStyleBackColor = true;
@@ -141,8 +149,9 @@
             this.chkPath.AutoSize = true;
             this.chkPath.Dock = System.Windows.Forms.DockStyle.Top;
             this.chkPath.Location = new System.Drawing.Point(0, 0);
+            this.chkPath.Margin = new System.Windows.Forms.Padding(2);
             this.chkPath.Name = "chkPath";
-            this.chkPath.Size = new System.Drawing.Size(495, 21);
+            this.chkPath.Size = new System.Drawing.Size(371, 17);
             this.chkPath.TabIndex = 0;
             this.chkPath.Text = "Custom Path To Minecraft (For MultiMC or Non-standard installs)";
             this.chkPath.UseVisualStyleBackColor = true;
@@ -155,8 +164,9 @@
             this.chkProfile.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkProfile.Dock = System.Windows.Forms.DockStyle.Top;
             this.chkProfile.Location = new System.Drawing.Point(0, 0);
+            this.chkProfile.Margin = new System.Windows.Forms.Padding(2);
             this.chkProfile.Name = "chkProfile";
-            this.chkProfile.Size = new System.Drawing.Size(495, 21);
+            this.chkProfile.Size = new System.Drawing.Size(371, 17);
             this.chkProfile.TabIndex = 1;
             this.chkProfile.Text = "Create Launcher Profile";
             this.toolTip1.SetToolTip(this.chkProfile, "Create or update a profile in the Minecraft Launcher");
@@ -168,8 +178,9 @@
             this.chkadvanced.AutoSize = true;
             this.chkadvanced.Dock = System.Windows.Forms.DockStyle.Top;
             this.chkadvanced.Location = new System.Drawing.Point(0, 0);
+            this.chkadvanced.Margin = new System.Windows.Forms.Padding(2);
             this.chkadvanced.Name = "chkadvanced";
-            this.chkadvanced.Size = new System.Drawing.Size(495, 21);
+            this.chkadvanced.Size = new System.Drawing.Size(371, 17);
             this.chkadvanced.TabIndex = 2;
             this.chkadvanced.Text = "Advanced";
             this.chkadvanced.UseVisualStyleBackColor = true;
@@ -178,6 +189,9 @@
             // grpProfile
             // 
             this.grpProfile.AutoSize = true;
+            this.grpProfile.Controls.Add(this.button1);
+            this.grpProfile.Controls.Add(this.textBox1);
+            this.grpProfile.Controls.Add(this.checkBox1);
             this.grpProfile.Controls.Add(this.label1);
             this.grpProfile.Controls.Add(this.cmbRAM);
             this.grpProfile.Controls.Add(this.btnModDir);
@@ -187,9 +201,11 @@
             this.grpProfile.Controls.Add(this.chkModDir);
             this.grpProfile.Controls.Add(this.chkProfileName);
             this.grpProfile.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpProfile.Location = new System.Drawing.Point(0, 21);
+            this.grpProfile.Location = new System.Drawing.Point(0, 17);
+            this.grpProfile.Margin = new System.Windows.Forms.Padding(2);
             this.grpProfile.Name = "grpProfile";
-            this.grpProfile.Size = new System.Drawing.Size(495, 119);
+            this.grpProfile.Padding = new System.Windows.Forms.Padding(2);
+            this.grpProfile.Size = new System.Drawing.Size(371, 130);
             this.grpProfile.TabIndex = 2;
             this.grpProfile.TabStop = false;
             this.grpProfile.Text = "Profile Options";
@@ -197,9 +213,10 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 77);
+            this.label1.Location = new System.Drawing.Point(5, 69);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(137, 17);
+            this.label1.Size = new System.Drawing.Size(104, 13);
             this.label1.TabIndex = 8;
             this.label1.Text = "RAM Allocation (GB)";
             // 
@@ -214,9 +231,10 @@
             "4",
             "6",
             "8"});
-            this.cmbRAM.Location = new System.Drawing.Point(155, 74);
+            this.cmbRAM.Location = new System.Drawing.Point(115, 66);
+            this.cmbRAM.Margin = new System.Windows.Forms.Padding(2);
             this.cmbRAM.Name = "cmbRAM";
-            this.cmbRAM.Size = new System.Drawing.Size(47, 24);
+            this.cmbRAM.Size = new System.Drawing.Size(36, 21);
             this.cmbRAM.TabIndex = 7;
             this.toolTip1.SetToolTip(this.cmbRAM, "The RAM allocation for the profile. Using more does not increase performance. 2 G" +
         "b is recommened except when using modpacks.");
@@ -224,52 +242,59 @@
             // btnModDir
             // 
             this.btnModDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnModDir.Location = new System.Drawing.Point(459, 45);
+            this.btnModDir.Location = new System.Drawing.Point(344, 40);
+            this.btnModDir.Margin = new System.Windows.Forms.Padding(2);
             this.btnModDir.Name = "btnModDir";
-            this.btnModDir.Size = new System.Drawing.Size(30, 23);
+            this.btnModDir.Size = new System.Drawing.Size(22, 19);
             this.btnModDir.TabIndex = 6;
             this.btnModDir.Text = "...";
             this.btnModDir.UseVisualStyleBackColor = true;
             this.btnModDir.Visible = false;
+            this.btnModDir.Click += new System.EventHandler(this.btnModDir_Click);
             // 
             // txtModDir
             // 
             this.txtModDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtModDir.Location = new System.Drawing.Point(165, 45);
+            this.txtModDir.Location = new System.Drawing.Point(124, 40);
+            this.txtModDir.Margin = new System.Windows.Forms.Padding(2);
             this.txtModDir.Name = "txtModDir";
             this.txtModDir.ReadOnly = true;
-            this.txtModDir.Size = new System.Drawing.Size(288, 22);
+            this.txtModDir.Size = new System.Drawing.Size(217, 20);
             this.txtModDir.TabIndex = 5;
             this.txtModDir.Visible = false;
             // 
             // chkZGC
             // 
             this.chkZGC.AutoSize = true;
-            this.chkZGC.Location = new System.Drawing.Point(231, 76);
+            this.chkZGC.Location = new System.Drawing.Point(173, 68);
+            this.chkZGC.Margin = new System.Windows.Forms.Padding(2);
             this.chkZGC.Name = "chkZGC";
-            this.chkZGC.Size = new System.Drawing.Size(179, 21);
+            this.chkZGC.Size = new System.Drawing.Size(137, 17);
             this.chkZGC.TabIndex = 3;
             this.chkZGC.Text = "Enable ZGC (Java 14+)";
             this.toolTip1.SetToolTip(this.chkZGC, "Enable the Java14+ Zero Garbage Collector using the profile args.");
             this.chkZGC.UseVisualStyleBackColor = true;
+            this.chkZGC.CheckedChanged += new System.EventHandler(this.chkZGC_CheckedChanged);
             // 
             // txtProfileName
             // 
             this.txtProfileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtProfileName.Enabled = false;
-            this.txtProfileName.Location = new System.Drawing.Point(188, 19);
+            this.txtProfileName.Location = new System.Drawing.Point(141, 15);
+            this.txtProfileName.Margin = new System.Windows.Forms.Padding(2);
             this.txtProfileName.Name = "txtProfileName";
-            this.txtProfileName.Size = new System.Drawing.Size(301, 22);
+            this.txtProfileName.Size = new System.Drawing.Size(227, 20);
             this.txtProfileName.TabIndex = 4;
             // 
             // chkModDir
             // 
             this.chkModDir.AutoSize = true;
-            this.chkModDir.Location = new System.Drawing.Point(11, 48);
+            this.chkModDir.Location = new System.Drawing.Point(8, 42);
+            this.chkModDir.Margin = new System.Windows.Forms.Padding(2);
             this.chkModDir.Name = "chkModDir";
-            this.chkModDir.Size = new System.Drawing.Size(148, 21);
+            this.chkModDir.Size = new System.Drawing.Size(116, 17);
             this.chkModDir.TabIndex = 3;
             this.chkModDir.Text = "Modpack Directory";
             this.toolTip1.SetToolTip(this.chkModDir, "Check to add a \'Game Directory\' to the profile for modpack support.");
@@ -279,9 +304,10 @@
             // chkProfileName
             // 
             this.chkProfileName.AutoSize = true;
-            this.chkProfileName.Location = new System.Drawing.Point(11, 21);
+            this.chkProfileName.Location = new System.Drawing.Point(8, 17);
+            this.chkProfileName.Margin = new System.Windows.Forms.Padding(2);
             this.chkProfileName.Name = "chkProfileName";
-            this.chkProfileName.Size = new System.Drawing.Size(162, 21);
+            this.chkProfileName.Size = new System.Drawing.Size(124, 17);
             this.chkProfileName.TabIndex = 2;
             this.chkProfileName.Text = "Custom Profile Name";
             this.toolTip1.SetToolTip(this.chkProfileName, "Check to give the profile a custom name");
@@ -292,40 +318,45 @@
             // 
             this.txtTarget.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtTarget.Location = new System.Drawing.Point(3, 3);
+            this.txtTarget.Location = new System.Drawing.Point(2, 2);
+            this.txtTarget.Margin = new System.Windows.Forms.Padding(2);
             this.txtTarget.Name = "txtTarget";
             this.txtTarget.ReadOnly = true;
-            this.txtTarget.Size = new System.Drawing.Size(431, 22);
+            this.txtTarget.Size = new System.Drawing.Size(324, 20);
             this.txtTarget.TabIndex = 3;
             // 
             // button4
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.Location = new System.Drawing.Point(440, 3);
+            this.button4.Location = new System.Drawing.Point(330, 2);
+            this.button4.Margin = new System.Windows.Forms.Padding(2);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(30, 23);
+            this.button4.Size = new System.Drawing.Size(22, 19);
             this.button4.TabIndex = 7;
             this.button4.Text = "...";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // chkForge
             // 
             this.chkForge.AutoSize = true;
             this.chkForge.Dock = System.Windows.Forms.DockStyle.Top;
             this.chkForge.Location = new System.Drawing.Point(0, 0);
+            this.chkForge.Margin = new System.Windows.Forms.Padding(2);
             this.chkForge.Name = "chkForge";
-            this.chkForge.Size = new System.Drawing.Size(495, 21);
+            this.chkForge.Size = new System.Drawing.Size(371, 17);
             this.chkForge.TabIndex = 8;
-            this.chkForge.Text = "Install Vivecraft With Forge";
+            this.chkForge.Text = "Install Vivecraft With Forge (Mod Support)";
             this.chkForge.UseVisualStyleBackColor = true;
             this.chkForge.CheckedChanged += new System.EventHandler(this.chkForge_CheckedChanged);
             // 
             // checkBox7
             // 
             this.checkBox7.AutoSize = true;
-            this.checkBox7.Location = new System.Drawing.Point(3, 3);
+            this.checkBox7.Location = new System.Drawing.Point(2, 2);
+            this.checkBox7.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox7.Name = "checkBox7";
-            this.checkBox7.Size = new System.Drawing.Size(170, 21);
+            this.checkBox7.Size = new System.Drawing.Size(129, 17);
             this.checkBox7.TabIndex = 9;
             this.checkBox7.Text = "Custom Forge Version";
             this.toolTip1.SetToolTip(this.checkBox7, "Check this if a custom Forge version is specified. Note that using a version othe" +
@@ -335,10 +366,11 @@
             // 
             // txtForgeVersion
             // 
-            this.txtForgeVersion.Location = new System.Drawing.Point(179, 3);
+            this.txtForgeVersion.Location = new System.Drawing.Point(135, 2);
+            this.txtForgeVersion.Margin = new System.Windows.Forms.Padding(2);
             this.txtForgeVersion.Name = "txtForgeVersion";
             this.txtForgeVersion.ReadOnly = true;
-            this.txtForgeVersion.Size = new System.Drawing.Size(100, 22);
+            this.txtForgeVersion.Size = new System.Drawing.Size(76, 20);
             this.txtForgeVersion.TabIndex = 10;
             // 
             // tableLayoutPanel1
@@ -349,14 +381,15 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.pnlButtons, 0, 9);
             this.tableLayoutPanel1.Controls.Add(this.pnlAdvanced, 0, 7);
-            this.tableLayoutPanel1.Controls.Add(this.pnlProfileOpt, 0, 5);
-            this.tableLayoutPanel1.Controls.Add(this.pnlForgeOpt, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.pnlProfileOpt, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.pnlForgeOpt, 0, 5);
             this.tableLayoutPanel1.Controls.Add(this.pnlCustom, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.pnlVersion, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 268);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 218);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(8);
+            this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(3);
             this.tableLayoutPanel1.RowCount = 10;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -368,30 +401,47 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(511, 490);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(383, 398);
             this.tableLayoutPanel1.TabIndex = 3;
             // 
-            // chkKatVR
+            // pnlButtons
             // 
-            this.chkKatVR.AutoSize = true;
-            this.chkKatVR.Location = new System.Drawing.Point(112, 3);
-            this.chkKatVR.Name = "chkKatVR";
-            this.chkKatVR.Size = new System.Drawing.Size(180, 21);
-            this.chkKatVR.TabIndex = 5;
-            this.chkKatVR.Text = "KATVR Treadmill Driver";
-            this.toolTip1.SetToolTip(this.chkKatVR, "Check to install and activate the KATVR treadmill driver for this profile");
-            this.chkKatVR.UseVisualStyleBackColor = true;
+            this.pnlButtons.AutoSize = true;
+            this.pnlButtons.Controls.Add(this.linkLabel2);
+            this.pnlButtons.Controls.Add(this.groupBox2);
+            this.pnlButtons.Controls.Add(this.linkLabel1);
+            this.pnlButtons.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlButtons.Location = new System.Drawing.Point(5, 418);
+            this.pnlButtons.Margin = new System.Windows.Forms.Padding(2);
+            this.pnlButtons.Name = "pnlButtons";
+            this.pnlButtons.Size = new System.Drawing.Size(373, 37);
+            this.pnlButtons.TabIndex = 6;
             // 
-            // chkKiosk
+            // linkLabel2
             // 
-            this.chkKiosk.AutoSize = true;
-            this.chkKiosk.Location = new System.Drawing.Point(3, 3);
-            this.chkKiosk.Name = "chkKiosk";
-            this.chkKiosk.Size = new System.Drawing.Size(103, 21);
-            this.chkKiosk.TabIndex = 4;
-            this.chkKiosk.Text = "Kiosk Mode";
-            this.toolTip1.SetToolTip(this.chkKiosk, "Check to disable controller inputs for this profile");
-            this.chkKiosk.UseVisualStyleBackColor = true;
+            this.linkLabel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.linkLabel2.AutoSize = true;
+            this.linkLabel2.Location = new System.Drawing.Point(0, 23);
+            this.linkLabel2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.linkLabel2.Name = "linkLabel2";
+            this.linkLabel2.Size = new System.Drawing.Size(89, 13);
+            this.linkLabel2.TabIndex = 5;
+            this.linkLabel2.TabStop = true;
+            this.linkLabel2.Text = "Support Vivecraft";
+            this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(0, 7);
+            this.linkLabel1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(104, 13);
+            this.linkLabel1.TabIndex = 4;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "Vivecraft Homepage";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // pnlAdvanced
             // 
@@ -399,148 +449,21 @@
             this.pnlAdvanced.Controls.Add(this.grpAdvanced);
             this.pnlAdvanced.Controls.Add(this.chkadvanced);
             this.pnlAdvanced.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlAdvanced.Location = new System.Drawing.Point(8, 368);
-            this.pnlAdvanced.Margin = new System.Windows.Forms.Padding(0);
+            this.pnlAdvanced.Location = new System.Drawing.Point(6, 358);
             this.pnlAdvanced.Name = "pnlAdvanced";
-            this.pnlAdvanced.Size = new System.Drawing.Size(495, 69);
+            this.pnlAdvanced.Size = new System.Drawing.Size(371, 55);
             this.pnlAdvanced.TabIndex = 6;
-            // 
-            // pnlProfileOpt
-            // 
-            this.pnlProfileOpt.AutoSize = true;
-            this.pnlProfileOpt.Controls.Add(this.grpProfile);
-            this.pnlProfileOpt.Controls.Add(this.chkProfile);
-            this.pnlProfileOpt.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlProfileOpt.Location = new System.Drawing.Point(8, 228);
-            this.pnlProfileOpt.Margin = new System.Windows.Forms.Padding(0);
-            this.pnlProfileOpt.Name = "pnlProfileOpt";
-            this.pnlProfileOpt.Size = new System.Drawing.Size(495, 140);
-            this.pnlProfileOpt.TabIndex = 4;
-            // 
-            // pnlForgeOpt
-            // 
-            this.pnlForgeOpt.AutoSize = true;
-            this.pnlForgeOpt.Controls.Add(this.grpForge);
-            this.pnlForgeOpt.Controls.Add(this.chkForge);
-            this.pnlForgeOpt.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlForgeOpt.Location = new System.Drawing.Point(8, 158);
-            this.pnlForgeOpt.Margin = new System.Windows.Forms.Padding(0);
-            this.pnlForgeOpt.Name = "pnlForgeOpt";
-            this.pnlForgeOpt.Size = new System.Drawing.Size(495, 70);
-            this.pnlForgeOpt.TabIndex = 2;
-            // 
-            // pnlCustom
-            // 
-            this.pnlCustom.AutoSize = true;
-            this.pnlCustom.Controls.Add(this.grpPath);
-            this.pnlCustom.Controls.Add(this.chkPath);
-            this.pnlCustom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlCustom.Location = new System.Drawing.Point(8, 87);
-            this.pnlCustom.Margin = new System.Windows.Forms.Padding(0);
-            this.pnlCustom.Name = "pnlCustom";
-            this.pnlCustom.Size = new System.Drawing.Size(495, 71);
-            this.pnlCustom.TabIndex = 0;
-            // 
-            // linkLabel1
-            // 
-            this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(0, 9);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(136, 17);
-            this.linkLabel1.TabIndex = 4;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Vivecraft Homepage";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
-            // 
-            // linkLabel2
-            // 
-            this.linkLabel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.linkLabel2.AutoSize = true;
-            this.linkLabel2.Location = new System.Drawing.Point(0, 28);
-            this.linkLabel2.Name = "linkLabel2";
-            this.linkLabel2.Size = new System.Drawing.Size(117, 17);
-            this.linkLabel2.TabIndex = 5;
-            this.linkLabel2.TabStop = true;
-            this.linkLabel2.Text = "Support Vivecraft";
-            this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
-            // 
-            // pnlVersion
-            // 
-            this.pnlVersion.AutoSize = true;
-            this.pnlVersion.Controls.Add(this.lblVersionDetails);
-            this.pnlVersion.Controls.Add(this.cmbVersion);
-            this.pnlVersion.Controls.Add(this.optNonVR);
-            this.pnlVersion.Controls.Add(this.optVR);
-            this.pnlVersion.Controls.Add(this.label2);
-            this.pnlVersion.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlVersion.Location = new System.Drawing.Point(8, 8);
-            this.pnlVersion.Margin = new System.Windows.Forms.Padding(0);
-            this.pnlVersion.Name = "pnlVersion";
-            this.pnlVersion.Size = new System.Drawing.Size(495, 79);
-            this.pnlVersion.TabIndex = 8;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(1, 3);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(243, 17);
-            this.label2.TabIndex = 9;
-            this.label2.Text = "Select VR type and Minecraft Version";
-            // 
-            // optVR
-            // 
-            this.optVR.AutoSize = true;
-            this.optVR.Checked = true;
-            this.optVR.Location = new System.Drawing.Point(14, 24);
-            this.optVR.Name = "optVR";
-            this.optVR.Size = new System.Drawing.Size(121, 21);
-            this.optVR.TabIndex = 10;
-            this.optVR.TabStop = true;
-            this.optVR.Text = "VR (SteamVR)";
-            this.toolTip1.SetToolTip(this.optVR, "The VR mod using SteamVR runtime.");
-            this.optVR.UseVisualStyleBackColor = true;
-            // 
-            // optNonVR
-            // 
-            this.optNonVR.AutoSize = true;
-            this.optNonVR.Location = new System.Drawing.Point(141, 24);
-            this.optNonVR.Name = "optNonVR";
-            this.optNonVR.Size = new System.Drawing.Size(79, 21);
-            this.optNonVR.TabIndex = 11;
-            this.optNonVR.Text = "Non-VR";
-            this.toolTip1.SetToolTip(this.optNonVR, "Non-VR vivecraft is for 2D desktop players to see VR animations and host LAN game" +
-        "s.");
-            this.optNonVR.UseVisualStyleBackColor = true;
-            this.optNonVR.CheckedChanged += new System.EventHandler(this.optNonVR_CheckedChanged);
-            // 
-            // cmbVersion
-            // 
-            this.cmbVersion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbVersion.FormattingEnabled = true;
-            this.cmbVersion.Location = new System.Drawing.Point(14, 52);
-            this.cmbVersion.Name = "cmbVersion";
-            this.cmbVersion.Size = new System.Drawing.Size(136, 24);
-            this.cmbVersion.TabIndex = 12;
-            this.cmbVersion.SelectedIndexChanged += new System.EventHandler(this.cmbVersion_SelectedIndexChanged);
-            // 
-            // lblVersionDetails
-            // 
-            this.lblVersionDetails.AutoSize = true;
-            this.lblVersionDetails.Location = new System.Drawing.Point(156, 55);
-            this.lblVersionDetails.Name = "lblVersionDetails";
-            this.lblVersionDetails.Size = new System.Drawing.Size(0, 17);
-            this.lblVersionDetails.TabIndex = 13;
             // 
             // grpAdvanced
             // 
             this.grpAdvanced.AutoSize = true;
             this.grpAdvanced.Controls.Add(this.flowLayoutPanel1);
             this.grpAdvanced.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpAdvanced.Location = new System.Drawing.Point(0, 21);
+            this.grpAdvanced.Location = new System.Drawing.Point(0, 17);
+            this.grpAdvanced.Margin = new System.Windows.Forms.Padding(2);
             this.grpAdvanced.Name = "grpAdvanced";
-            this.grpAdvanced.Size = new System.Drawing.Size(495, 48);
+            this.grpAdvanced.Padding = new System.Windows.Forms.Padding(2);
+            this.grpAdvanced.Size = new System.Drawing.Size(371, 38);
             this.grpAdvanced.TabIndex = 3;
             this.grpAdvanced.TabStop = false;
             this.grpAdvanced.Text = "Advanced Options";
@@ -552,19 +475,68 @@
             this.flowLayoutPanel1.Controls.Add(this.chkKiosk);
             this.flowLayoutPanel1.Controls.Add(this.chkKatVR);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 18);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(2, 15);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(489, 27);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(367, 21);
             this.flowLayoutPanel1.TabIndex = 0;
+            // 
+            // chkKiosk
+            // 
+            this.chkKiosk.AutoSize = true;
+            this.chkKiosk.Location = new System.Drawing.Point(2, 2);
+            this.chkKiosk.Margin = new System.Windows.Forms.Padding(2);
+            this.chkKiosk.Name = "chkKiosk";
+            this.chkKiosk.Size = new System.Drawing.Size(82, 17);
+            this.chkKiosk.TabIndex = 4;
+            this.chkKiosk.Text = "Kiosk Mode";
+            this.toolTip1.SetToolTip(this.chkKiosk, "Check to disable controller inputs for this profile");
+            this.chkKiosk.UseVisualStyleBackColor = true;
+            // 
+            // chkKatVR
+            // 
+            this.chkKatVR.AutoSize = true;
+            this.chkKatVR.Location = new System.Drawing.Point(88, 2);
+            this.chkKatVR.Margin = new System.Windows.Forms.Padding(2);
+            this.chkKatVR.Name = "chkKatVR";
+            this.chkKatVR.Size = new System.Drawing.Size(138, 17);
+            this.chkKatVR.TabIndex = 5;
+            this.chkKatVR.Text = "KATVR Treadmill Driver";
+            this.toolTip1.SetToolTip(this.chkKatVR, "Check to install and activate the KATVR treadmill driver for this profile");
+            this.chkKatVR.UseVisualStyleBackColor = true;
+            // 
+            // pnlProfileOpt
+            // 
+            this.pnlProfileOpt.AutoSize = true;
+            this.pnlProfileOpt.Controls.Add(this.grpProfile);
+            this.pnlProfileOpt.Controls.Add(this.chkProfile);
+            this.pnlProfileOpt.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlProfileOpt.Location = new System.Drawing.Point(6, 141);
+            this.pnlProfileOpt.Name = "pnlProfileOpt";
+            this.pnlProfileOpt.Size = new System.Drawing.Size(371, 147);
+            this.pnlProfileOpt.TabIndex = 4;
+            // 
+            // pnlForgeOpt
+            // 
+            this.pnlForgeOpt.AutoSize = true;
+            this.pnlForgeOpt.Controls.Add(this.grpForge);
+            this.pnlForgeOpt.Controls.Add(this.chkForge);
+            this.pnlForgeOpt.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlForgeOpt.Location = new System.Drawing.Point(6, 294);
+            this.pnlForgeOpt.Name = "pnlForgeOpt";
+            this.pnlForgeOpt.Size = new System.Drawing.Size(371, 58);
+            this.pnlForgeOpt.TabIndex = 2;
             // 
             // grpForge
             // 
             this.grpForge.AutoSize = true;
             this.grpForge.Controls.Add(this.flowLayoutPanel2);
             this.grpForge.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpForge.Location = new System.Drawing.Point(0, 21);
+            this.grpForge.Location = new System.Drawing.Point(0, 17);
+            this.grpForge.Margin = new System.Windows.Forms.Padding(2);
             this.grpForge.Name = "grpForge";
-            this.grpForge.Size = new System.Drawing.Size(495, 49);
+            this.grpForge.Padding = new System.Windows.Forms.Padding(2);
+            this.grpForge.Size = new System.Drawing.Size(371, 41);
             this.grpForge.TabIndex = 9;
             this.grpForge.TabStop = false;
             this.grpForge.Text = "Forge Options";
@@ -576,19 +548,33 @@
             this.flowLayoutPanel2.Controls.Add(this.checkBox7);
             this.flowLayoutPanel2.Controls.Add(this.txtForgeVersion);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 18);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(2, 15);
+            this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(2);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(489, 28);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(367, 24);
             this.flowLayoutPanel2.TabIndex = 0;
+            // 
+            // pnlCustom
+            // 
+            this.pnlCustom.AutoSize = true;
+            this.pnlCustom.Controls.Add(this.grpPath);
+            this.pnlCustom.Controls.Add(this.chkPath);
+            this.pnlCustom.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlCustom.Location = new System.Drawing.Point(6, 77);
+            this.pnlCustom.Name = "pnlCustom";
+            this.pnlCustom.Size = new System.Drawing.Size(371, 58);
+            this.pnlCustom.TabIndex = 0;
             // 
             // grpPath
             // 
             this.grpPath.AutoSize = true;
             this.grpPath.Controls.Add(this.flowLayoutPanel3);
             this.grpPath.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpPath.Location = new System.Drawing.Point(0, 21);
+            this.grpPath.Location = new System.Drawing.Point(0, 17);
+            this.grpPath.Margin = new System.Windows.Forms.Padding(2);
             this.grpPath.Name = "grpPath";
-            this.grpPath.Size = new System.Drawing.Size(495, 50);
+            this.grpPath.Padding = new System.Windows.Forms.Padding(2);
+            this.grpPath.Size = new System.Drawing.Size(371, 41);
             this.grpPath.TabIndex = 10;
             this.grpPath.TabStop = false;
             this.grpPath.Text = "Path Options";
@@ -600,47 +586,149 @@
             this.flowLayoutPanel3.Controls.Add(this.txtTarget);
             this.flowLayoutPanel3.Controls.Add(this.button4);
             this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel3.Location = new System.Drawing.Point(3, 18);
+            this.flowLayoutPanel3.Location = new System.Drawing.Point(2, 15);
+            this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(2);
             this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-            this.flowLayoutPanel3.Size = new System.Drawing.Size(489, 29);
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(367, 24);
             this.flowLayoutPanel3.TabIndex = 0;
             // 
-            // pnlButtons
+            // pnlVersion
             // 
-            this.pnlButtons.AutoSize = true;
-            this.pnlButtons.Controls.Add(this.linkLabel2);
-            this.pnlButtons.Controls.Add(this.groupBox2);
-            this.pnlButtons.Controls.Add(this.linkLabel1);
-            this.pnlButtons.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlButtons.Location = new System.Drawing.Point(11, 440);
-            this.pnlButtons.Name = "pnlButtons";
-            this.pnlButtons.Size = new System.Drawing.Size(489, 45);
-            this.pnlButtons.TabIndex = 6;
+            this.pnlVersion.AutoSize = true;
+            this.pnlVersion.Controls.Add(this.lblVersionDetails);
+            this.pnlVersion.Controls.Add(this.cmbVersion);
+            this.pnlVersion.Controls.Add(this.optNonVR);
+            this.pnlVersion.Controls.Add(this.optVR);
+            this.pnlVersion.Controls.Add(this.label2);
+            this.pnlVersion.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlVersion.Location = new System.Drawing.Point(6, 6);
+            this.pnlVersion.Name = "pnlVersion";
+            this.pnlVersion.Size = new System.Drawing.Size(371, 65);
+            this.pnlVersion.TabIndex = 8;
+            // 
+            // lblVersionDetails
+            // 
+            this.lblVersionDetails.AutoSize = true;
+            this.lblVersionDetails.Location = new System.Drawing.Point(125, 46);
+            this.lblVersionDetails.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblVersionDetails.Name = "lblVersionDetails";
+            this.lblVersionDetails.Size = new System.Drawing.Size(0, 13);
+            this.lblVersionDetails.TabIndex = 13;
+            // 
+            // cmbVersion
+            // 
+            this.cmbVersion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbVersion.FormattingEnabled = true;
+            this.cmbVersion.Location = new System.Drawing.Point(10, 42);
+            this.cmbVersion.Margin = new System.Windows.Forms.Padding(2);
+            this.cmbVersion.Name = "cmbVersion";
+            this.cmbVersion.Size = new System.Drawing.Size(103, 21);
+            this.cmbVersion.TabIndex = 12;
+            this.cmbVersion.SelectedIndexChanged += new System.EventHandler(this.cmbVersion_SelectedIndexChanged);
+            // 
+            // optNonVR
+            // 
+            this.optNonVR.AutoSize = true;
+            this.optNonVR.Location = new System.Drawing.Point(106, 20);
+            this.optNonVR.Margin = new System.Windows.Forms.Padding(2);
+            this.optNonVR.Name = "optNonVR";
+            this.optNonVR.Size = new System.Drawing.Size(63, 17);
+            this.optNonVR.TabIndex = 11;
+            this.optNonVR.Text = "Non-VR";
+            this.toolTip1.SetToolTip(this.optNonVR, "Non-VR vivecraft is for 2D desktop players to see VR animations and host LAN game" +
+        "s.");
+            this.optNonVR.UseVisualStyleBackColor = true;
+            this.optNonVR.CheckedChanged += new System.EventHandler(this.optNonVR_CheckedChanged);
+            // 
+            // optVR
+            // 
+            this.optVR.AutoSize = true;
+            this.optVR.Checked = true;
+            this.optVR.Location = new System.Drawing.Point(10, 20);
+            this.optVR.Margin = new System.Windows.Forms.Padding(2);
+            this.optVR.Name = "optVR";
+            this.optVR.Size = new System.Drawing.Size(94, 17);
+            this.optVR.TabIndex = 10;
+            this.optVR.TabStop = true;
+            this.optVR.Text = "VR (SteamVR)";
+            this.toolTip1.SetToolTip(this.optVR, "The VR mod using SteamVR runtime.");
+            this.optVR.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(1, 2);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(184, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Select VR type and Minecraft Version";
             // 
             // label3
             // 
             this.label3.Dock = System.Windows.Forms.DockStyle.Top;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(0, 239);
+            this.label3.Location = new System.Drawing.Point(0, 194);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(511, 29);
+            this.label3.Size = new System.Drawing.Size(383, 24);
             this.label3.TabIndex = 14;
             this.label3.Text = "Virtual Reality for Minecraft: Java Edition";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // textBox1
+            // 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox1.Location = new System.Drawing.Point(115, 93);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(226, 20);
+            this.textBox1.TabIndex = 10;
+            this.toolTip1.SetToolTip(this.textBox1, "Path to Java Runtime");
+            this.textBox1.Visible = false;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(9, 95);
+            this.checkBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(87, 17);
+            this.checkBox1.TabIndex = 9;
+            this.checkBox1.Text = "Custom Java";
+            this.toolTip1.SetToolTip(this.checkBox1, "Check to use a custom Java version for this profile. Required for ZGC.");
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.Visible = false;
+            // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.Location = new System.Drawing.Point(344, 93);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(22, 19);
+            this.button1.TabIndex = 11;
+            this.button1.Text = "...";
+            this.toolTip1.SetToolTip(this.button1, "Select Java Runtime...");
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
+            // 
             // frmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(511, 758);
+            this.ClientSize = new System.Drawing.Size(383, 616);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.pictureBox1);
             this.Cursor = System.Windows.Forms.Cursors.AppStarting;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Vivecraft Installer";
@@ -652,30 +740,30 @@
             this.grpProfile.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.pnlButtons.ResumeLayout(false);
+            this.pnlButtons.PerformLayout();
             this.pnlAdvanced.ResumeLayout(false);
             this.pnlAdvanced.PerformLayout();
-            this.pnlProfileOpt.ResumeLayout(false);
-            this.pnlProfileOpt.PerformLayout();
-            this.pnlForgeOpt.ResumeLayout(false);
-            this.pnlForgeOpt.PerformLayout();
-            this.pnlCustom.ResumeLayout(false);
-            this.pnlCustom.PerformLayout();
-            this.pnlVersion.ResumeLayout(false);
-            this.pnlVersion.PerformLayout();
             this.grpAdvanced.ResumeLayout(false);
             this.grpAdvanced.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
+            this.pnlProfileOpt.ResumeLayout(false);
+            this.pnlProfileOpt.PerformLayout();
+            this.pnlForgeOpt.ResumeLayout(false);
+            this.pnlForgeOpt.PerformLayout();
             this.grpForge.ResumeLayout(false);
             this.grpForge.PerformLayout();
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
+            this.pnlCustom.ResumeLayout(false);
+            this.pnlCustom.PerformLayout();
             this.grpPath.ResumeLayout(false);
             this.grpPath.PerformLayout();
             this.flowLayoutPanel3.ResumeLayout(false);
             this.flowLayoutPanel3.PerformLayout();
-            this.pnlButtons.ResumeLayout(false);
-            this.pnlButtons.PerformLayout();
+            this.pnlVersion.ResumeLayout(false);
+            this.pnlVersion.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -728,6 +816,9 @@
         private System.Windows.Forms.Panel pnlButtons;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 

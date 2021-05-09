@@ -10,87 +10,70 @@ using System.Threading.Tasks;
 using System.Management;
 using System.Diagnostics;
 
-namespace VivecraftInstaller
-{
-    class Util
-    {
-        public static bool checkMD5(FileInfo a, String b)
-        {
+namespace VivecraftInstaller {
+    class Util {
+        public static bool checkMD5(FileInfo a, String b) {
             if (a.Exists == false) return false;
             if (b == null) return true;
             return GetMd5(a).ToLower().Equals(b.ToLower());
         }
 
-        public static string GetMd5(FileInfo fo)
-        {
+        public static string GetMd5(FileInfo fo) {
             if (!fo.Exists)
                 return null;
 
             if (fo.Length < 1)
                 return null;
 
-            using (var md5 = MD5.Create())
-            {
-                using (var stream = File.OpenRead(fo.FullName))
-                {
+            using (var md5 = MD5.Create()) {
+                using (var stream = File.OpenRead(fo.FullName)) {
                     return BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToLower();
                 }
             }
         }
 
-        public static string getWebRequestwithTimeout(string address, short timeoutS)
-        {
+        public static string getWebRequestwithTimeout(string address, short timeoutS) {
             var w = new myWebClient();
             w.Headers.Add("User-Agent", "Vivecraft Installer");
             w.Timeout = timeoutS;
             w.Encoding = Encoding.UTF8;
             {
-                try
-                {
+                try {
                     var ret = w.DownloadString(address);
                     return ret;
-                }
-                catch (Exception ex)
-                {
+                } catch (Exception ex) {
                     throw ex;
                 }
             }
         }
 
-        public static byte[] getWebBinarywithTimeout(string address, short timeoutS)
-        {
+        public static byte[] getWebBinarywithTimeout(string address, short timeoutS) {
             var w = new myWebClient();
             w.Timeout = timeoutS;
             {
-                try
-                {
+                try {
                     var ret = w.DownloadData(address);
                     return ret;
-                }
-                catch (Exception ex)
-                {
+                } catch (Exception ex) {
                     throw ex;
                 }
             }
         }
 
-        public static string[] getGPU()
-        {
+        public static string[] getGPU() {
             SelectQuery queryVideo = new SelectQuery("Win32_VideoController");
             ManagementObjectSearcher searchVideo = new ManagementObjectSearcher(queryVideo);
             var ret = new List<string>();
-            foreach (ManagementObject video in searchVideo.Get())
-            {
+            foreach (ManagementObject video in searchVideo.Get()) {
                 ret.Add(video["Name"].ToString());
             }
             return ret.ToArray();
         }
 
-        public static string[] getJava()
-        {
+        public static string getJava(string path = "") {
             var p = new Process();
             p.StartInfo.UseShellExecute = false;
-            p.StartInfo.FileName = "java";
+            p.StartInfo.FileName = Path.Combine(path, "java");
             p.StartInfo.Arguments = "-version";
             p.EnableRaisingEvents = true;
             p.StartInfo.RedirectStandardError = true;
@@ -98,13 +81,11 @@ namespace VivecraftInstaller
 
             var ret = new List<string>();
 
-            p.OutputDataReceived += (s, e) =>
-            {
+            p.OutputDataReceived += (s, e) => {
                 ret.Add(e.Data);
             };
 
-            p.ErrorDataReceived += (s, e) =>
-            {
+            p.ErrorDataReceived += (s, e) => {
                 ret.Add(e.Data);
             };
 
@@ -113,8 +94,27 @@ namespace VivecraftInstaller
             p.BeginErrorReadLine();
             p.WaitForExit();
 
-            return ret.ToArray(); ;
+            foreach (string line in ret) {
+                if (line.ToLower().Contains("version")) {
+                    int a = line.IndexOf('"') + 1;
+                    int b = line.LastIndexOf('"') - a;
 
+                    return line.Substring(a, b);
+                }
+            }
+
+            return "";
+        }
+
+        public static int parseJavaVersion(String version) {
+            try {
+                if (version.IndexOf('.') != -1)
+                    return int.Parse(version.Substring(0, version.IndexOf('.')));
+                else
+                    return int.Parse(version);
+            } catch (Exception) {
+                throw new ApplicationException("Invalid Java version: " + version);
+            }
         }
 
         /*

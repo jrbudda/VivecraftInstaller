@@ -15,153 +15,115 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Deployment.Application;
 
-namespace VivecraftInstaller
-{
-    public partial class frmMain : Form
-    {
+namespace VivecraftInstaller {
+    public partial class frmMain : Form {
 
-        public frmMain()
-        {
+        public frmMain() {
             InitializeComponent();
         }
 
-        private void chkProfileName_CheckedChanged(object sender, EventArgs e)
-        {
+        private void chkProfileName_CheckedChanged(object sender, EventArgs e) {
             txtProfileName.Enabled = chkProfileName.Checked;
         }
 
-        private void chkModDir_CheckedChanged(object sender, EventArgs e)
-        {
+        private void chkModDir_CheckedChanged(object sender, EventArgs e) {
             txtModDir.Visible = chkModDir.Checked;
             btnModDir.Visible = chkModDir.Checked;
         }
 
-        private void checkBox2_CheckedChanged(object sender, EventArgs e)
-        {
+        private void checkBox2_CheckedChanged(object sender, EventArgs e) {
             grpProfile.Visible = chkProfile.Checked;
         }
 
-        private void chkForge_CheckedChanged(object sender, EventArgs e)
-        {
+        private void chkForge_CheckedChanged(object sender, EventArgs e) {
             grpForge.Visible = chkForge.Checked;
         }
 
-        private void chkPath_CheckedChanged(object sender, EventArgs e)
-        {
+        private void chkPath_CheckedChanged(object sender, EventArgs e) {
             grpPath.Visible = chkPath.Checked;
         }
 
-        private void chkadvanced_CheckedChanged(object sender, EventArgs e)
-        {
+        private void chkadvanced_CheckedChanged(object sender, EventArgs e) {
             grpAdvanced.Visible = chkadvanced.Checked;
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
+        private void button2_Click(object sender, EventArgs e) {
             this.Close();
         }
 
-        private string getVersions()
-        {
+        private string getVersions() {
             string vers = null;
-            try
-            {
+            try {
                 vers = Util.getWebRequestwithTimeout(Global.versionsUrl, 5);
-            }
-            catch (Exception ex)
-            {
-                this.BeginInvoke((MethodInvoker)delegate
-                {
+            } catch (Exception ex) {
+                this.BeginInvoke((MethodInvoker)delegate {
                     MessageBox.Show(this, "Cannot download versions List!\n " + ex.Message);
                 });
 
-                try
-                {
-                    using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("VivecraftInstaller.json.versions.json"))
-                    {
-                        using (TextReader reader = new StreamReader(stream))
-                        {
+                try {
+                    using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("VivecraftInstaller.json.versions.json")) {
+                        using (TextReader reader = new StreamReader(stream)) {
                             vers = reader.ReadToEnd();
                         }
                     }
-                }
-                catch (Exception)
-                {
+                } catch (Exception) {
                     MessageBox.Show("Cannot extract versions List!\n " + ex.Message);
                 }
             }
             return vers;
         }
 
-        private Config getCfg(string url)
-        {
+        private Config getCfg(string url) {
             return parseCfg(Util.getWebRequestwithTimeout(url, 10));
         }
 
-        private Config parseCfg(string cfg)
-        {
+        private Config parseCfg(string cfg) {
             string[] lines = cfg.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
             Dictionary<string, object> ret = new Dictionary<string, object>();
-            foreach (var l in lines)
-            {
+            foreach (var l in lines) {
                 var pts = l.Split('=');
                 if (pts.Length != 2) continue;
                 var val = pts[1].Trim();
                 bool res;
-                if (bool.TryParse(val, out res))
-                {
+                if (bool.TryParse(val, out res)) {
                     ret[pts[0].Trim()] = res;
-                }
-                else
-                {
+                } else {
                     ret[pts[0].Trim()] = pts[1].Trim().Replace("\"", "");
                 }
             }
             return new Config(ret);
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
+        private void Form1_Load(object sender, EventArgs e) {
             invis();
+            this.Text = "Vivecraft Installer " + Assembly.GetExecutingAssembly().GetName().Version;
             System.Threading.ThreadPool.QueueUserWorkItem(startup);
         }
 
-        private void startup(object state)
-        {
+        private void startup(object state) {
             updateCheck();
             var json = getVersions();
-            if (json == null)
-            {
+            if (json == null) {
                 MessageBox.Show("Fatal: Cannot get versions list!");
                 Application.Exit();
-            }
-            else
-            {
+            } else {
                 VersionList versionlist = Newtonsoft.Json.JsonConvert.DeserializeObject<VersionList>(json);
 
-                foreach (Version ver in versionlist.versions)
-                { //download and parse the configs
+                foreach (Version ver in versionlist.versions) { //download and parse the configs
                     //TODO: do this as needed with a cache.
-                    try
-                    {
+                    try {
                         ver.configVR = getCfg(ver.vrcfg);
-                    }
-                    catch (Exception)
-                    {
+                    } catch (Exception) {
                     }
 
-                    try
-                    {
+                    try {
                         ver.configNONVR = getCfg(ver.nonvrcfg);
-                    }
-                    catch (Exception)
-                    {
+                    } catch (Exception) {
                     }
                 }
 
 
-                this.BeginInvoke((MethodInvoker)delegate
-                {
+                this.BeginInvoke((MethodInvoker)delegate {
                     this.Cursor = Cursors.Default;
                     populateVersions(versionlist);
                 });
@@ -169,25 +131,21 @@ namespace VivecraftInstaller
         }
 
         private VersionList versionlist;
-        private void populateVersions(VersionList list)
-        {
+        private void populateVersions(VersionList list) {
             this.versionlist = list;
             cmbVersion.Items.Clear();
             cmbVersion.Items.AddRange(list.versions);
             if (cmbVersion.Items.Count > 0) cmbVersion.SelectedIndex = 0;
         }
 
-        private void updateCheck()
-        {
+        private void updateCheck() {
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
+        private void button1_Click(object sender, EventArgs e) {
             var version = ((Version)cmbVersion.SelectedItem);
             var config = version.configVR;
-            if (optNonVR.Checked)
-            {
+            if (optNonVR.Checked) {
                 config = ((Version)cmbVersion.SelectedItem).configNONVR;
                 config.isNonVR = true;
             }
@@ -202,8 +160,7 @@ namespace VivecraftInstaller
             Global.customGameDir = chkModDir.Checked;
             Global.gameDir = txtModDir.Text;
 
-            if (chkZGC.Checked && config.ALLOW_ZGC_INSTALL)
-            {
+            if (chkZGC.Checked && config.ALLOW_ZGC_INSTALL) {
                 Global.zgc = true;
                 Global.gcOpts = "-XX:+UnlockExperimentalVMOptions -XX:+UseZGC";
             }
@@ -214,42 +171,32 @@ namespace VivecraftInstaller
             this.Hide();
         }
 
-        private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
-        {
+        private void frmMain_FormClosed(object sender, FormClosedEventArgs e) {
             Application.Exit();
         }
 
-        private void invis()
-        {
-            foreach (Control control in tableLayoutPanel1.Controls)
-            {
+        private void invis() {
+            foreach (Control control in tableLayoutPanel1.Controls) {
                 if (control != pnlVersion && control != pnlButtons)
                     control.Visible = false;
             }
         }
 
-        private void cmbVersion_SelectedIndexChanged(object sender, EventArgs e)
-        {
+        private void cmbVersion_SelectedIndexChanged(object sender, EventArgs e) {
             Version selection = (Version)cmbVersion.SelectedItem;
             Config cfg = null;
 
-            if (selection == null)
-            {
+            if (selection == null) {
                 invis();
-            }
-            else
-            {
+            } else {
                 cfg = selection.configVR;
                 if (optNonVR.Checked)
                     cfg = selection.configNONVR;
 
-                if (cfg == null)
-                {
+                if (cfg == null) {
                     invis();
                     lblVersionDetails.Text = "ERROR";
-                }
-                else
-                {
+                } else {
                     pnlCustom.Visible = true;
                     pnlProfileOpt.Visible = true;
                     pnlForgeOpt.Visible = cfg.ALLOW_FORGE_INSTALL; ;
@@ -266,24 +213,40 @@ namespace VivecraftInstaller
         }
 
 
-        private void checkBox7_CheckedChanged(object sender, EventArgs e)
-        {
+        private void checkBox7_CheckedChanged(object sender, EventArgs e) {
             txtForgeVersion.ReadOnly = !checkBox7.Checked;
         }
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
             System.Diagnostics.Process.Start(Global.HOMEPAGE_LINK);
         }
 
-        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
+        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
             System.Diagnostics.Process.Start(Global.DONATION_LINK);
         }
 
-        private void optNonVR_CheckedChanged(object sender, EventArgs e)
-        {
+        private void optNonVR_CheckedChanged(object sender, EventArgs e) {
             cmbVersion_SelectedIndexChanged(this, null);
+        }
+
+        private void btnModDir_Click(object sender, EventArgs e) {
+            var f = new FolderBrowserDialog();
+            f.SelectedPath = "C:\\";
+            if (f.ShowDialog(this) == DialogResult.OK) {
+                txtModDir.Text = f.SelectedPath;
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e) {
+            var f = new FolderBrowserDialog();
+            f.SelectedPath = "C:\\";
+            if (f.ShowDialog(this) == DialogResult.OK) {
+                txtTarget.Text = f.SelectedPath;
+            }
+        }
+
+        private void chkZGC_CheckedChanged(object sender, EventArgs e) {
+
         }
     }
 }
