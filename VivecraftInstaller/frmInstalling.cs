@@ -255,15 +255,25 @@ namespace VivecraftInstaller {
                     continue;
                 }
                 if (entry.Name.ToLower() == "version") {
-
                     var txt = new StreamReader(archive.GetInputStream(entry)).ReadToEnd();
                     var pts = txt.Split(':');
                     version_id = pts[0];
                     continue;
                 }
+            }
+
+            if (version_jar == null || version_id == null) {
+                log("Invalid archive!");
+                return false;
+            }
+
+            version_id += mod;
+
+            foreach (ICSharpCode.SharpZipLib.Zip.ZipEntry entry in archive) {
                 if (entry.Name.ToLower() == json_filename) {
                     try {
                         var txt = new StreamReader(archive.GetInputStream(entry)).ReadToEnd();
+                        txt = txt.Replace("$FILE", version_id);
                         version_json = JObject.Parse(txt);
                     } catch (Exception ex) {
                         log("Failed parsing version json! " + ex.Message);
@@ -272,12 +282,10 @@ namespace VivecraftInstaller {
                 }
             }
 
-            if (version_jar == null || version_json == null || version_id == null) {
+            if (version_json == null) {
                 log("Invalid archive!");
                 return false;
             }
-
-            version_id += mod;
 
             //modify json args if needed
             try {
@@ -295,10 +303,16 @@ namespace VivecraftInstaller {
                 JArray libs = (JArray)version_json["libraries"];
                 //Since this installer does not download Optifine, inject the url into any existing json not yet updated.
                 foreach (var lib in libs) {
-                    if (lib["name"].ToString().Contains("optifine:OptiFine") && lib["url"] == null) {
-                        lib["url"] = "http://vivecraft.org/jar/";
+                    if (lib["name"].ToString().Contains("optifine:OptiFine")) {
+
+                        if (lib["url"] == null)
+                            lib["url"] = "http://vivecraft.org/jar/";
+
                         if (lib["MMC-hint"] != null)
                             lib["MMC-hint"].Parent.Remove();
+
+                        if (!lib["name"].ToString().Contains("_LIB"))
+                            lib["name"] = lib["name"] + "_LIB";
                     }
                 }
 
@@ -380,7 +394,7 @@ namespace VivecraftInstaller {
 
                 if (prof == null) {
                     prof = new JObject();
-                    prof["created"] = DateTime.Now.ToString(dateFormat);
+                    prof["created"] = DateTime.UtcNow.ToString(dateFormat);
                     profiles[Global.profileName] = prof;
                 }
 
@@ -389,7 +403,7 @@ namespace VivecraftInstaller {
                 prof["name"] = Global.profileName;
                 prof["icon"] = Global.ICON;
                 prof["type"] = "custom";
-                prof["lastUsed"] = DateTime.Now.ToString(dateFormat);
+                prof["lastUsed"] = DateTime.UtcNow.ToString(dateFormat);
 
                 if (Global.customGameDir && Global.gameDir.Trim() != "") {
                     String dir = Global.gameDir.Trim();
@@ -442,8 +456,8 @@ namespace VivecraftInstaller {
 
         public bool installForge() {
             if (Global.customJavaPath == null) {
-                if(MessageBox.Show(this, "The installer could not locate a java runtime, the Forge isntaller may not run. Continue?"
-                    ,"No Java", MessageBoxButtons.YesNo,MessageBoxIcon.Warning) == DialogResult.No){
+                if (MessageBox.Show(this, "The installer could not locate a java runtime, the Forge isntaller may not run. Continue?"
+                    , "No Java", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No) {
                     return false;
                 }
                 Global.customJavaPath = "";

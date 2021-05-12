@@ -145,6 +145,7 @@ namespace VivecraftInstaller {
         private void button1_Click(object sender, EventArgs e) {
             var version = ((Version)cmbVersion.SelectedItem);
             var config = version.configVR;
+
             if (optNonVR.Checked) {
                 config = ((Version)cmbVersion.SelectedItem).configNONVR;
                 config.isNonVR = true;
@@ -159,6 +160,9 @@ namespace VivecraftInstaller {
             Global.profileName = txtProfileName.Text;
             Global.customGameDir = chkModDir.Checked;
             Global.gameDir = txtModDir.Text;
+            Global.zgc = false;
+            Global.xms = int.Parse((string)cmbRAM.SelectedItem);
+            Global.xmx = int.Parse((string)cmbRAM.SelectedItem);
 
             if (chkZGC.Checked && config.ALLOW_ZGC_INSTALL) {
                 Global.zgc = true;
@@ -207,6 +211,7 @@ namespace VivecraftInstaller {
                     txtProfileName.Text = !chkForge.Checked ? cfg.DEFAULT_PROFILE_NAME : cfg.DEFAULT_PROFILE_NAME_FORGE;
                     cmbRAM.SelectedIndex = !chkForge.Checked ? 1 : 3;
                     txtTarget.Text = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".minecraft");
+                    chkZGC.Visible = cfg.ALLOW_ZGC_INSTALL;
                 }
             }
             btnInstall.Enabled = cfg != null;

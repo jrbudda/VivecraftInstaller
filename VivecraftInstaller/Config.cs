@@ -88,6 +88,14 @@ namespace VivecraftInstaller
                 this.PROJECT_NAME = (string)ret["project_name"];
             if (ret.ContainsKey("minecrift_build"))
                 this.VIVECRAFT_VERSION = this.MC_VERSION + "-" + (string)ret["minecrift_build"];
+
+            if (this.VIVECRAFT_VERSION.ToLower().Contains("nonvr")) {
+                if (!this.PROJECT_NAME.ToLower().Contains("nonvr")){
+                    this.PROJECT_NAME = this.PROJECT_NAME + " NonVR";
+                }
+            }
+
+
         }
         /**/
     }

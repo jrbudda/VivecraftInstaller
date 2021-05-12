@@ -73,6 +73,7 @@ namespace VivecraftInstaller {
         public static string getJava(string path = "") {
             var p = new Process();
             p.StartInfo.UseShellExecute = false;
+            p.StartInfo.CreateNoWindow = true;
             p.StartInfo.FileName = Path.Combine(path, "java");
             p.StartInfo.Arguments = "-version";
             p.EnableRaisingEvents = true;
